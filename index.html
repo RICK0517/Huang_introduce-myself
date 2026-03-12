@@ -6,15 +6,6 @@
   <title>黃崇瑞｜場域創新與 AI 實作自動化管理</title>
   <meta name="description" content="黃崇瑞的個人頁面，聚焦場域創新、AI 協作、自動化流程、文案發想與系統優化。" />
   <style>
-    canvas#particle-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-      opacity: 0.9;
-    }
     :root {
       --bg: #07111f;
       --bg-soft: rgba(15, 23, 42, 0.72);
@@ -60,6 +51,17 @@
       mask-image: radial-gradient(circle at center, rgba(0,0,0,0.95), transparent 85%);
       pointer-events: none;
       opacity: 0.45;
+      z-index: -2;
+    }
+
+    canvas#particle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.9;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -397,6 +399,11 @@
       gap: 22px;
     }
 
+    #projects-extra .projects-grid {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: 380px;
+    }
+
     .project-card {
       overflow: hidden;
       padding: 0;
@@ -412,6 +419,30 @@
       place-items: center;
       color: rgba(230, 238, 248, 0.78);
       font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      cursor: zoom-in;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .project-image::after {
+      content: "點擊放大";
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(5, 13, 24, 0.72);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(230, 238, 248, 0.82);
+      font-size: 0.8rem;
       letter-spacing: 0.04em;
     }
 
@@ -458,6 +489,31 @@
     .quote-card span {
       color: var(--muted);
       font-size: 0.95rem;
+    }
+
+    .particle-toolbar {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(103, 232, 249, 0.14);
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.25s ease;
+      font: inherit;
+    }
+
+    .mode-btn.active,
+    .mode-btn:hover {
+      color: #f5fbff;
+      border-color: rgba(103, 232, 249, 0.32);
+      background: rgba(103, 232, 249, 0.1);
     }
 
     .contact-card {
@@ -546,50 +602,6 @@
     .btn-matrix:hover {
       box-shadow: inset 0 0 20px rgba(48, 155, 91, 0.16), 0 0 22px rgba(34,197,94,0.18);
       border-color: rgba(98,255,163,0.45);
-    }
-
-    .particle-toolbar {
-      margin-top: 18px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .mode-btn {
-      padding: 9px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(103, 232, 249, 0.14);
-      background: rgba(255,255,255,0.03);
-      color: var(--muted);
-      cursor: pointer;
-      transition: 0.25s ease;
-      font: inherit;
-    }
-
-    .mode-btn.active,
-    .mode-btn:hover {
-      color: #f5fbff;
-      border-color: rgba(103, 232, 249, 0.32);
-      background: rgba(103, 232, 249, 0.1);
-    }
-
-    .project-image {
-      cursor: zoom-in;
-      position: relative;
-    }
-
-    .project-image::after {
-      content: "點擊放大";
-      position: absolute;
-      right: 14px;
-      bottom: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(5, 13, 24, 0.72);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: rgba(230, 238, 248, 0.82);
-      font-size: 0.8rem;
-      letter-spacing: 0.04em;
     }
 
     .image-modal {
@@ -686,6 +698,10 @@
         grid-template-columns: 1fr;
       }
 
+      #projects-extra .projects-grid {
+        max-width: none;
+      }
+
       .skills-grid {
         grid-template-columns: 1fr;
       }
@@ -725,6 +741,7 @@
 </head>
 <body>
   <canvas id="particle-canvas"></canvas>
+
   <div class="image-modal" id="imageModal" aria-hidden="true">
     <div class="image-modal-inner">
       <div class="image-modal-header">
@@ -736,6 +753,7 @@
       </div>
     </div>
   </div>
+
   <nav class="nav">
     <div class="container nav-inner">
       <a href="#top" class="brand">
@@ -904,11 +922,13 @@
       <div class="container">
         <div class="section-title reveal">
           <h2>專案展示</h2>
-          <p>這裡先保留展示結構。你上傳圖片後，可以直接替換成正式專案內容與封面。</p>
+          <p>以下展示目前的代表性實作，聚焦在 AI 協作、本地模型整合、場域系統設計與資料後台規劃。</p>
         </div>
         <div class="projects-grid">
           <article class="glass project-card reveal">
-            <div class="project-image"><img src="assets/project-01.png" alt="VS Code 與 Codex 實作畫面" style="width:100%;height:100%;object-fit:cover;" /></div>
+            <div class="project-image">
+              <img src="assets/project-01.png" alt="VS Code 與 Codex 實作畫面" />
+            </div>
             <div class="project-body">
               <h3>VS Code × Codex 協作實作</h3>
               <p>以 AI 協作方式快速規劃、修改與驗證程式，將開發流程從純手動撰寫轉向更高效率的實作與迭代模式。</p>
@@ -922,7 +942,9 @@
           </article>
 
           <article class="glass project-card reveal">
-            <div class="project-image"><img src="assets/project-02.png" alt="以 Ollama 製作網頁 AI 實作優化畫面" style="width:100%;height:100%;object-fit:cover;" /></div>
+            <div class="project-image">
+              <img src="assets/project-02.png" alt="以 Ollama 製作網頁 AI 實作優化畫面" />
+            </div>
             <div class="project-body">
               <h3>Ollama 網頁 AI 實作優化</h3>
               <p>將本地 AI 模型導入網頁流程，強化互動能力、回應邏輯與管理操作，讓工具更貼近真實使用情境。</p>
@@ -936,7 +958,9 @@
           </article>
 
           <article class="glass project-card reveal">
-            <div class="project-image"><img src="assets/project-03.png" alt="自定義場域管理畫面" style="width:100%;height:100%;object-fit:cover;" /></div>
+            <div class="project-image">
+              <img src="assets/project-03.png" alt="自定義場域管理畫面" />
+            </div>
             <div class="project-body">
               <h3>自定義場域管理系統</h3>
               <p>整合介面、資訊顯示與管理流程，依照場域需求打造可視化的操作頁面，提升管理效率與資訊掌握度。</p>
@@ -952,20 +976,17 @@
       </div>
     </section>
 
-    <section>
-      <div class="container">
-        <div class="glass quote-card reveal">
-          <p>你要的不是 AI，而是懂得學習、不被時間拋下的人。</p>
-          <span>這句話也會成為整個頁面的核心精神。</span>
-        </div>
-      </div>
-    </section>
-
     <section id="projects-extra">
       <div class="container">
+        <div class="section-title reveal">
+          <h2>更多實作</h2>
+          <p>補充展示後台與資料結構面向的規劃能力，強化整體系統可維護性與擴充性。</p>
+        </div>
         <div class="projects-grid">
           <article class="glass project-card reveal">
-            <div class="project-image"><img src="assets/project-04.png" alt="簡易網頁後台實作 SQL 畫面" style="width:100%;height:100%;object-fit:cover;" /></div>
+            <div class="project-image">
+              <img src="assets/project-04.png" alt="簡易網頁後台實作 SQL 畫面" />
+            </div>
             <div class="project-body">
               <h3>簡易網頁後台與 SQL 結構實作</h3>
               <p>從資料表、後台管理到帳號與欄位結構，建立可支援日常維護與功能擴充的基礎管理系統。</p>
@@ -981,6 +1002,15 @@
       </div>
     </section>
 
+    <section>
+      <div class="container">
+        <div class="glass quote-card reveal">
+          <p>你要的不是 AI，而是懂得學習、不被時間拋下的人。</p>
+          <span>這句話會成為整個頁面的核心精神。</span>
+        </div>
+      </div>
+    </section>
+
     <section id="contact">
       <div class="container">
         <div class="glass contact-card reveal">
@@ -990,9 +1020,7 @@
             <p>如果你想交流合作、討論專案，或進一步了解我的工作方式，歡迎發送訊號。系統將保持開放。</p>
           </div>
           <div class="contact-links">
-            <!-- GitHub 連結已移除，僅保留 Email 聯絡 -->
             <a class="btn btn-matrix" href="mailto:q32996967@gmail.com">q32996967@gmail.com</a>
-            
           </div>
         </div>
       </div>
@@ -1094,7 +1122,7 @@
           const dist = Math.hypot(dx, dy);
           if (dist < 110) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(103, 232, 249, ${0.15 - dist / 900})`;
+            ctx.strokeStyle = `rgba(103, 232, 249, ${Math.max(0.02, 0.15 - dist / 900)})`;
             ctx.lineWidth = 1;
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(q.x, q.y);
