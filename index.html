@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>黃崇瑞｜場域創新與 AI 實作自動化管理</title>
+  <meta name="description" content="黃崇瑞的個人頁面，聚焦場域創新、AI 協作、自動化流程、文案發想與系統優化。" />
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: rgba(15, 23, 42, 0.72);
+      --panel: rgba(12, 24, 42, 0.72);
+      --panel-strong: rgba(8, 18, 34, 0.9);
+      --line: rgba(125, 211, 252, 0.16);
+      --text: #e6eef8;
+      --muted: #9fb0c7;
+      --primary: #67e8f9;
+      --secondary: #a78bfa;
+      --accent: #22d3ee;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --max-width: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(34, 211, 238, 0.16), transparent 26%),
+        radial-gradient(circle at 85% 15%, rgba(167, 139, 250, 0.18), transparent 22%),
+        radial-gradient(circle at 75% 75%, rgba(14, 165, 233, 0.12), transparent 20%),
+        linear-gradient(180deg, #040a13 0%, #07111f 45%, #09192d 100%);
+      min-height: 100vh;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(circle at center, rgba(0,0,0,0.95), transparent 85%);
+      pointer-events: none;
+      opacity: 0.45;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(var(--max-width), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(4, 10, 19, 0.58);
+      border-bottom: 1px solid rgba(103, 232, 249, 0.08);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-badge {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 0 24px rgba(103, 232, 249, 0.9);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    section { padding: 88px 0; }
+
+    .hero {
+      padding-top: 72px;
+      padding-bottom: 42px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .glass {
+      background: linear-gradient(180deg, rgba(18, 29, 48, 0.78), rgba(8, 16, 28, 0.78));
+      border: 1px solid rgba(103, 232, 249, 0.12);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-card {
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -120px auto;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(103, 232, 249, 0.18), transparent 70%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(103, 232, 249, 0.08);
+      border: 1px solid rgba(103, 232, 249, 0.12);
+      color: var(--primary);
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      font-size: clamp(2.6rem, 5vw, 5rem);
+      line-height: 1.03;
+      margin-bottom: 16px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      color: #dbe8f8;
+      max-width: 680px;
+      margin-bottom: 18px;
+    }
+
+    .hero-desc {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 660px;
+    }
+
+    .highlight-line {
+      margin: 26px 0 0;
+      padding: 18px 20px;
+      border-left: 3px solid var(--primary);
+      background: rgba(103, 232, 249, 0.06);
+      border-radius: 0 16px 16px 0;
+      color: #e8f9ff;
+      font-size: 1rem;
+    }
+
+    .hero-actions {
+      margin-top: 28px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 20px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: 0.25s ease;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.95), rgba(167, 139, 250, 0.95));
+      color: #041019;
+      box-shadow: 0 8px 24px rgba(34, 211, 238, 0.22);
+    }
+
+    .btn-secondary {
+      border-color: rgba(159, 176, 199, 0.24);
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(103, 232, 249, 0.25);
+    }
+
+    .hero-side {
+      padding: 24px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .mini-panel {
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .mini-panel h3 {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: #f4f8ff;
+    }
+
+    .mini-panel p {
+      color: var(--muted);
+      font-size: 0.96rem;
+      margin-bottom: 0;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat-box {
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(103, 232, 249, 0.05);
+      border: 1px solid rgba(103, 232, 249, 0.08);
+    }
+
+    .stat-box strong {
+      display: block;
+      font-size: 1.35rem;
+      margin-bottom: 4px;
+      color: #ebfeff;
+    }
+
+    .stat-box span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
+      margin-bottom: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title p {
+      max-width: 520px;
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .about-card, .about-side {
+      padding: 30px;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 16px;
+      font-size: 1.02rem;
+    }
+
+    .about-points {
+      display: grid;
+      gap: 14px;
+    }
+
+    .point-item {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .point-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #f4f8ff;
+    }
+
+    .point-item span {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .skill-card {
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(103, 232, 249, 0.06), transparent 35%, rgba(167, 139, 250, 0.06));
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .skill-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .skill-card p {
+      color: var(--muted);
+      position: relative;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      position: relative;
+    }
+
+    .tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      color: #defcff;
+      background: rgba(103, 232, 249, 0.07);
+      border: 1px solid rgba(103, 232, 249, 0.12);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .project-card {
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .project-image {
+      aspect-ratio: 16 / 10;
+      background:
+        linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(167, 139, 250, 0.18)),
+        linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: grid;
+      place-items: center;
+      color: rgba(230, 238, 248, 0.78);
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+    }
+
+    .project-body {
+      padding: 22px;
+    }
+
+    .project-body h3 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+    }
+
+    .project-body p {
+      color: var(--muted);
+      font-size: 0.96rem;
+      margin-bottom: 16px;
+    }
+
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .project-footer {
+      font-size: 0.92rem;
+      color: #d7e8f8;
+      opacity: 0.95;
+    }
+
+    .quote-card {
+      padding: 34px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.12), rgba(167, 139, 250, 0.1));
+    }
+
+    .quote-card p {
+      font-size: clamp(1.2rem, 2vw, 1.55rem);
+      margin-bottom: 10px;
+      color: #effcff;
+    }
+
+    .quote-card span {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .contact-card {
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .contact-info h3 {
+      font-size: 1.35rem;
+      margin-bottom: 10px;
+    }
+
+    .contact-info p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    footer {
+      padding: 24px 0 52px;
+      color: rgba(159, 176, 199, 0.76);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .about-grid,
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-card,
+      .about-card,
+      .about-side,
+      .contact-card {
+        padding: 24px;
+      }
+
+      .hero-side {
+        padding: 18px;
+      }
+
+      .mini-stats {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 72px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="brand">
+        <span class="brand-badge"></span>
+        <span>黃崇瑞</span>
+      </a>
+      <div class="nav-links">
+        <a href="#about">關於我</a>
+        <a href="#skills">能力</a>
+        <a href="#projects">專案</a>
+        <a href="#projects-extra">更多實作</a>
+        <a href="#contact">聯絡</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="glass hero-card reveal visible">
+          <div class="eyebrow">場域創新 × AI 協作 × 自動化管理</div>
+          <h1>黃崇瑞</h1>
+          <p class="hero-subtitle">在創意、AI 與自動化之間，打造更有效率的實作方式。</p>
+          <p class="hero-desc">
+            聚焦場域創新、AI 協作應用、自動化流程設計與系統優化，
+            將想法、需求與工具整合成可執行的方案，讓概念真正能夠落地與運作。
+          </p>
+          <div class="highlight-line">
+            你要的不是 AI，而是懂得學習、不被時間拋下的人。
+          </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">查看專案</a>
+            <a class="btn btn-secondary" href="#about">關於我</a>
+          </div>
+        </div>
+
+        <div class="glass hero-side reveal">
+          <div class="mini-panel">
+            <h3>定位</h3>
+            <p>以 AI 協作、文案發想、自動化流程與場域優化為核心，串接創意、需求與實際執行。</p>
+          </div>
+          <div class="mini-stats">
+            <div class="stat-box">
+              <strong>AI 協作</strong>
+              <span>工具整合與應用流程</span>
+            </div>
+            <div class="stat-box">
+              <strong>自動化</strong>
+              <span>減少重複工作與時間成本</span>
+            </div>
+            <div class="stat-box">
+              <strong>文案發想</strong>
+              <span>提案、結構、敘事整理</span>
+            </div>
+            <div class="stat-box">
+              <strong>流程優化</strong>
+              <span>從需求到可落地方案</span>
+            </div>
+          </div>
+          <div class="mini-panel">
+            <h3>角色</h3>
+            <p>我不是傳統工程師，更接近創意與技術之間的橋樑，協助把抽象想法轉成可實作、可優化、可持續迭代的系統與專案。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-title reveal">
+          <h2>關於我</h2>
+          <p>從需求理解、概念轉譯到流程設計，我關注的是如何讓創意與 AI 工具真正服務現實場景。</p>
+        </div>
+        <div class="about-grid">
+          <div class="glass about-card reveal">
+            <div class="about-text">
+              <p>我關注的是如何讓創意與技術真正落地。透過 AI 協作、流程設計與工具整合，將原本複雜或重複的工作轉化為更有效率的自動化系統。</p>
+              <p>我的角色並不是傳統工程師，更接近於創意與技術之間的橋樑。我會從需求出發，分析問題、設計流程、運用 AI 工具，建立自動化或優化方案，讓想法不只停留在概念，而能實際運作。</p>
+              <p>目前主要聚焦於場域創新、AI 協作應用、自動化流程設計，以及工作效率與系統優化，希望建立更靈活、更能持續成長的實作方式。</p>
+            </div>
+          </div>
+          <div class="glass about-side reveal">
+            <div class="about-points">
+              <div class="point-item">
+                <strong>需求轉譯</strong>
+                <span>把模糊的想法整理成可討論、可規劃、可執行的方向。</span>
+              </div>
+              <div class="point-item">
+                <strong>工具整合</strong>
+                <span>運用 AI、程式與數位工具組成實際能運作的流程。</span>
+              </div>
+              <div class="point-item">
+                <strong>流程優化</strong>
+                <span>減少重複工作，改善操作路徑，提升整體效率與可維護性。</span>
+              </div>
+              <div class="point-item">
+                <strong>持續學習</strong>
+                <span>在快速變動的環境裡，保持調整、學習與實作的能力。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="container">
+        <div class="section-title reveal">
+          <h2>能力與方向</h2>
+          <p>比起單一技能，更重視如何把不同工具與思路組合成能解決問題的工作方式。</p>
+        </div>
+        <div class="skills-grid">
+          <article class="glass skill-card reveal">
+            <h3>AI 協作</h3>
+            <p>利用 AI 工具輔助創作、分析與工作規劃，建立更穩定的人機協作流程，提升產出速度與思考效率。</p>
+            <div class="tags">
+              <span class="tag">AI 工具整合</span>
+              <span class="tag">提示設計</span>
+              <span class="tag">協作流程</span>
+              <span class="tag">AI 輔助分析</span>
+            </div>
+          </article>
+
+          <article class="glass skill-card reveal">
+            <h3>文案發想</h3>
+            <p>從概念、需求到提案，整理內容結構並發展具方向性的文案，協助專案更清楚地表達價值與目標。</p>
+            <div class="tags">
+              <span class="tag">提案文案</span>
+              <span class="tag">內容結構</span>
+              <span class="tag">概念發想</span>
+              <span class="tag">敘事整理</span>
+            </div>
+          </article>
+
+          <article class="glass skill-card reveal">
+            <h3>程式自動化</h3>
+            <p>透過工具與程式建立自動化流程，減少重複性操作，讓資料整理、任務執行與日常管理更有效率。</p>
+            <div class="tags">
+              <span class="tag">流程設計</span>
+              <span class="tag">資料整理</span>
+              <span class="tag">自動化應用</span>
+              <span class="tag">功能落地</span>
+            </div>
+          </article>
+
+          <article class="glass skill-card reveal">
+            <h3>優化專員</h3>
+            <p>觀察使用流程與系統結構，找出可優化的地方，設計更順暢的操作方式與更具延展性的實作方案。</p>
+            <div class="tags">
+              <span class="tag">流程優化</span>
+              <span class="tag">系統改善</span>
+              <span class="tag">體驗調整</span>
+              <span class="tag">執行支援</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <div class="section-title reveal">
+          <h2>專案展示</h2>
+          <p>這裡先保留展示結構。你上傳圖片後，可以直接替換成正式專案內容與封面。</p>
+        </div>
+        <div class="projects-grid">
+          <article class="glass project-card reveal">
+            <div class="project-image"><img src="assets/project-01.png" alt="VS Code 與 Codex 實作畫面" style="width:100%;height:100%;object-fit:cover;" /></div>
+            <div class="project-body">
+              <h3>VS Code × Codex 協作實作</h3>
+              <p>以 AI 協作方式快速規劃、修改與驗證程式，將開發流程從純手動撰寫轉向更高效率的實作與迭代模式。</p>
+              <div class="project-meta">
+                <span class="tag">AI 協作</span>
+                <span class="tag">VS Code</span>
+                <span class="tag">開發流程</span>
+              </div>
+              <div class="project-footer">角色：需求整理 / AI 協作實作 / 開發流程優化</div>
+            </div>
+          </article>
+
+          <article class="glass project-card reveal">
+            <div class="project-image"><img src="assets/project-02.png" alt="以 Ollama 製作網頁 AI 實作優化畫面" style="width:100%;height:100%;object-fit:cover;" /></div>
+            <div class="project-body">
+              <h3>Ollama 網頁 AI 實作優化</h3>
+              <p>將本地 AI 模型導入網頁流程，強化互動能力、回應邏輯與管理操作，讓工具更貼近真實使用情境。</p>
+              <div class="project-meta">
+                <span class="tag">Ollama</span>
+                <span class="tag">網頁 AI</span>
+                <span class="tag">功能優化</span>
+              </div>
+              <div class="project-footer">角色：功能規劃 / AI 應用整合 / 使用流程改善</div>
+            </div>
+          </article>
+
+          <article class="glass project-card reveal">
+            <div class="project-image"><img src="assets/project-03.png" alt="自定義場域管理畫面" style="width:100%;height:100%;object-fit:cover;" /></div>
+            <div class="project-body">
+              <h3>自定義場域管理系統</h3>
+              <p>整合介面、資訊顯示與管理流程，依照場域需求打造可視化的操作頁面，提升管理效率與資訊掌握度。</p>
+              <div class="project-meta">
+                <span class="tag">場域管理</span>
+                <span class="tag">介面設計</span>
+                <span class="tag">流程整合</span>
+              </div>
+              <div class="project-footer">角色：介面規劃 / 場域需求轉譯 / 系統流程設計</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="glass quote-card reveal">
+          <p>你要的不是 AI，而是懂得學習、不被時間拋下的人。</p>
+          <span>這句話也會成為整個頁面的核心精神。</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects-extra">
+      <div class="container">
+        <div class="projects-grid">
+          <article class="glass project-card reveal">
+            <div class="project-image"><img src="assets/project-04.png" alt="簡易網頁後台實作 SQL 畫面" style="width:100%;height:100%;object-fit:cover;" /></div>
+            <div class="project-body">
+              <h3>簡易網頁後台與 SQL 結構實作</h3>
+              <p>從資料表、後台管理到帳號與欄位結構，建立可支援日常維護與功能擴充的基礎管理系統。</p>
+              <div class="project-meta">
+                <span class="tag">SQL</span>
+                <span class="tag">後台管理</span>
+                <span class="tag">資料結構</span>
+              </div>
+              <div class="project-footer">角色：資料規劃 / 後台流程設計 / 系統基礎建置</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="glass contact-card reveal">
+          <div class="contact-info">
+            <h3>聯絡方式</h3>
+            <p>如果你想交流合作、討論專案，或進一步了解我的工作方式，歡迎與我聯絡。</p>
+          </div>
+          <div class="contact-links">
+            <!-- GitHub 連結已移除，僅保留 Email 聯絡 -->
+            <a class="btn btn-primary" href="mailto:q32996967@gmail.com">q32996967@gmail.com</a>
+            
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 黃崇瑞. All Rights Reserved.
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.14 });
+
+    document.querySelectorAll('.reveal').forEach((el, index) => {
+      if (!el.classList.contains('visible')) {
+        el.style.transitionDelay = `${index * 0.05}s`;
+      }
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
